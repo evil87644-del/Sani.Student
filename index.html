@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="fa">
+<head>
+<meta charset="utf-8">
+<title>آموزش چندضلعی‌ها</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --neon1: #7c4dff;
+    --neon2: #00e5ff;
+    --bg: #000000;
+    --card: rgba(20,20,30,0.85);
+    --glass: rgba(255,255,255,0.04);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:18px;
+    font-family:"Vazirmatn",sans-serif;
+    direction:rtl;
+    background:var(--bg);
+    color:#fff;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  .wrap{max-width:920px;margin:0 auto}
+  h1{
+    text-align:center;margin:6px 0 18px;font-size:28px;
+    color:#fff;
+    text-shadow:0 0 12px var(--neon1),0 0 28px var(--neon2);
+    font-weight:800;
+  }
+  .row{display:flex;flex-wrap:wrap;gap:16px}
+  .card{
+    background:var(--card);
+    border-radius:14px;
+    padding:16px;
+    box-shadow:0 0 28px rgba(124,77,255,0.07), inset 0 0 12px rgba(0,229,255,0.03);
+    border:1px solid rgba(124,77,255,0.22);
+    flex:1 1 320px;
+    min-width:260px;
+  }
+  h2{margin:0 0 10px;color:var(--neon2);font-weight:800;text-shadow:0 0 8px var(--neon2)}
+  p{line-height:1.6;color:#eef; margin:0 0 10px}
+  label{display:block;margin-bottom:6px;font-weight:700}
+  input[type="number"], select {
+    width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);
+    background:var(--glass);color:#fff;font-weight:700;
+  }
+  button {
+    background:linear-gradient(90deg,var(--neon1),var(--neon2));
+    color:#fff;border:0;padding:10px 14px;border-radius:10px;font-weight:800;
+    cursor:pointer;box-shadow:0 0 18px rgba(124,77,255,0.2);
+  }
+  button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.08)}
+  .result{margin-top:12px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);font-weight:800}
+  .grid{display:flex;gap:8px;flex-wrap:wrap}
+  .small{font-size:13px;color:#cfefff}
+  /* quiz */
+  .quiz-q{margin-bottom:12px}
+  .option{display:block;margin:6px 0}
+  .score{font-size:16px;font-weight:800;margin-top:10px;color:var(--neon2)}
+  /* responsive */
+  @media(max-width:700px){
+    .row{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>آموزش و تمرین — چندضلعی‌ها (پایهٔ هشتم)</h1>
+
+    <div class="row">
+      <!-- آموزش -->
+      <div class="card">
+        <h2>مفاهیم پایه</h2>
+        <p><strong>چندضلعی</strong> جسمی مسطح است که از چند خط راست پیاپی تشکیل شده و شکل بسته ایجاد می‌کند. هر نقطهٔ تقاطع خط‌ها، یک رأس نامیده می‌شود.</p>
+        <p class="small">فرمول‌های مهم:</p>
+        <ul>
+          <li>مجموع زوایای داخلی یک n-ضلعی: <code>(n − 2) × 180</code></li>
+          <li>اندازه هر زاویه در چندضلعی منتظم: <code>((n − 2) × 180) / n</code></li>
+          <li>تعداد قطرها: <code>n × (n − 3) / 2</code></li>
+        </ul>
+        <p class="small">مثال سریع: برای شش‌ضلعی (n=6): مجموع زوایا = (6−2)×180 = 720 درجه. هر زاویه منتظم = 720/6 = 120 درجه. تعداد قطر = 6×3/2 = 9.</p>
+      </div>
+
+      <!-- ماشین حساب -->
+      <div class="card">
+        <h2>ماشین‌حساب چندضلعی</h2>
+        <label>تعداد ضلع (n)</label>
+        <input id="nInput" type="number" min="3" value="5">
+        <div style="height:10px"></div>
+        <div class="grid">
+          <button onclick="calcAll()">محاسبه کن</button>
+          <button class="secondary" onclick="fillExample(3)">مثلث</button>
+          <button class="secondary" onclick="fillExample(4)">مربع</button>
+          <button class="secondary" onclick="fillExample(6)">شش‌ضلعی</button>
+        </div>
+        <div id="calcResult" class="result" style="display:none"></div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:16px">
+      <!-- تجسم (ساده) -->
+      <div class="card">
+        <h2>تجسم سادهٔ منتظم</h2>
+        <label>رسم یک n-ضلعی منتظم</label>
+        <input id="drawN" type="number" min="3" value="5">
+        <div style="height:10px"></div>
+        <button onclick="drawPoly()">رسم کن</button>
+        <div style="height:12px"></div>
+        <canvas id="polyCanvas" width="400" height="260" style="background:rgba(255,255,255,0.02);border-radius:8px"></canvas>
+        <div class="small" style="margin-top:8px">نقش: چندضلعی منتظم با n ضلع</div>
+      </div>
+
+      <!-- آزمون -->
+      <div class="card">
+        <h2>آزمون سریع</h2>
+        <div class="small">پنج سؤال تصادفی، هر سؤال یک انتخابی</div>
+        <div style="height:8px"></div>
+        <button onclick="startQuiz()">شروع آزمون</button>
+        <div id="quizArea" style="margin-top:12px"></div>
+      </div>
+    </div>
+
+    <div style="height:18px"></div>
+    <div class="small">طراحی و برنامه‌نویسی: امیرحسام نصراله‌زاده و مهدی نصراله‌زاده</div>
+  </div>
+
+<script>
+/* محاسبات */
+function calcAll(){
+  const n = parseInt(document.getElementById('nInput').value,10);
+  const res = document.getElementById('calcResult');
+  if(!Number.isInteger(n) || n < 3){ res.style.display='block'; res.textContent='لطفاً عدد صحیح بزرگ‌تر یا مساوی 3 وارد کنید.'; return; }
+  const sum = (n-2)*180;
+  const each = +(sum / n).toFixed(4);
+  const diagonals = n*(n-3)/2;
+  res.style.display='block';
+  res.innerHTML = `
+    <div>تعداد ضلع: <strong>${n}</strong></div>
+    <div>مجموع زوایا (درجه): <strong>${sum}</strong></div>
+    <div>هر زاویه در چندضلعی منتظم (درجه): <strong>${each}</strong></div>
+    <div>تعداد قطرها: <strong>${diagonals}</strong></div>
+  `;
+}
+
+/* پر کردن مثال */
+function fillExample(k){ document.getElementById('nInput').value = k; calcAll(); }
+
+/* رسم چندضلعی منتظم */
+function drawPoly(){
+  const c = document.getElementById('polyCanvas');
+  const n = parseInt(document.getElementById('drawN').value,10);
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
+  if(!Number.isInteger(n) || n<3){ ctx.fillStyle='#fff'; ctx.fillText('n را >=3 وارد کنید',10,20); return; }
+  const cx = c.width/2, cy = c.height/2, R = Math.min(cx,cy)-20;
+  ctx.strokeStyle = '#7c4dff'; ctx.lineWidth=2;
+  ctx.fillStyle = 'rgba(0,229,255,0.06)';
+  ctx.beginPath();
+  for(let i=0;i<n;i++){
+    const ang = -Math.PI/2 + 2*Math.PI*i/n;
+    const x = cx + R*Math.cos(ang);
+    const y = cy + R*Math.sin(ang);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  // رسم رئوس
+  for(let i=0;i<n;i++){
+    const ang = -Math.PI/2 + 2*Math.PI*i/n;
+    const x = cx + R*Math.cos(ang);
+    const y = cy + R*Math.sin(ang);
+    ctx.beginPath(); ctx.fillStyle='#00e5ff'; ctx.arc(x,y,4,0,2*Math.PI); ctx.fill();
+  }
+}
+
+/* آزمون */
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+function makeQuestion(){
+  const type = randInt(1,3); // 1: sum 2: each 3: diagonals
+  const n = randInt(3,12);
+  if(type===1){
+    const ans = (n-2)*180;
+    return {q:`مجموع زوایای داخلی چندضلعی با ${n} ضلع چند درجه است؟`, choices: shuffle([ans, ans+180, ans-90, ans-360]), answer: ans};
+  } else if(type===2){
+    const sum = (n-2)*180;
+    const ans = +(sum/n).toFixed(4);
+    return {q:`اندازه هر زاویهٔ یک چندضلعی منتظم ${n} ضلعی چند درجه است؟`, choices: shuffle([ans, +(ans+10).toFixed(4), +(ans-5).toFixed(4), +(ans+20).toFixed(4)]), answer: ans};
+  } else {
+    const ans = n*(n-3)/2;
+    return {q:`تعداد قطرهای یک ${n} ضلعی چند است؟`, choices: shuffle([ans, ans+1, Math.max(0,ans-2), ans+3]), answer: ans};
+  }
+}
+
+function shuffle(arr){ return arr.sort(()=>Math.random()-0.5); }
+
+let quizQuestions = [], quizIndex=0, quizScore=0;
+
+function startQuiz(){
+  quizQuestions = [];
+  for(let i=0;i<5;i++) quizQuestions.push(makeQuestion());
+  quizIndex=0; quizScore=0;
+  showQuiz();
+}
+
+function showQuiz(){
+  const area = document.getElementById('quizArea');
+  if(quizIndex>=quizQuestions.length){
+    area.innerHTML = `<div class="score">آزمون تمام شد — امتیاز شما: ${quizScore}/${quizQuestions.length}</div>`;
+    return;
+  }
+  const Q = quizQuestions[quizIndex];
+  let html = `<div class="quiz-q"><strong>سوال ${quizIndex+1}:</strong> ${Q.q}</div>`;
+  Q.choices.forEach(c=>{
+    html += `<label class="option"><input type="radio" name="opt" value="${c}"> ${c}</label>`;
+  });
+  html += `<div style="margin-top:8px"><button onclick="submitAnswer()">ارسال پاسخ</button></div>`;
+  area.innerHTML = html;
+}
+
+function submitAnswer(){
+  const sel = document.querySelector('input[name="opt"]:checked');
+  if(!sel){ alert('یک گزینه انتخاب کن'); return; }
+  const val = Number(sel.value);
+  const correct = Number(quizQuestions[quizIndex].answer);
+  if(Math.abs(val - correct) < 1e-6){ quizScore++; alert('درست'); }
+  else alert('غلط — جواب: ' + correct);
+  quizIndex++; showQuiz();
+}
+
+/* ذخیره محلی بهترین نمره (اختیاری) */
+(function(){
+  const best = localStorage.getItem('polygons_best');
+  if(best) console.log('Best polygon score:', best);
+})();
+
+/* helpers */
+document.addEventListener('DOMContentLoaded', ()=>{ drawPoly(); });
+</script>
+</body>
+
+</html>
